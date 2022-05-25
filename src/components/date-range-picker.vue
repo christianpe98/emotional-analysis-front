@@ -1,16 +1,15 @@
 <template>
-  <v-menu
-    v-model="menu"
-    :close-on-content-click="false"
-    :nudge-right="40"
-    transition="scale-transition"
-    offset-y
-    min-width="auto"
+  <v-dialog
+    ref="dialog"
+    v-model="modal"
+    :return-value.sync="dates"
+    persistent
+    width="290px"
   >
     <template v-slot:activator="{ on, attrs }">
       <v-text-field
-        v-model="date"
-        label="Picker without buttons"
+        v-model="formattedDates"
+        label="Seleccione un rango de fechas"
         prepend-icon="mdi-calendar"
         readonly
         v-bind="attrs"
@@ -18,11 +17,18 @@
       ></v-text-field>
     </template>
     <v-date-picker
-      v-model="date"
-      @input="menu = false"
-      :allowed-dates="(date) => date <= new Date().toISOString().substr(0, 10)"
-    ></v-date-picker>
-  </v-menu>
+      v-model="dates"
+      scrollable
+      range
+      :show-current="false"
+      min="2010-11-06"
+      :max="new Date().toISOString().split('T')[0]"
+    >
+      <v-spacer></v-spacer>
+      <v-btn text color="primary" @click="modal = false"> Cancel </v-btn>
+      <v-btn text color="primary" @click="saveDates"> OK </v-btn>
+    </v-date-picker>
+  </v-dialog>
 </template>
 
 <script>
@@ -31,13 +37,33 @@ export default {
   prop: ["value"],
   data() {
     return {
-      date: "",
-      menu: false,
+      dates: [],
+      modal: false,
+      isError: false,
+      errorText: "",
     };
   },
-  watch: {
-    date(newValue) {
-      this.$emit("input", newValue);
+  methods: {
+    saveDates() {
+      if (this.dates.length === 0) {
+        this.isError = true;
+        this.errorText =
+          "Debes seleccionar una fecha iniciar y una fecha final";
+        return;
+      }
+      this.$refs.dialog.save(this.dates);
+      this.$emit("input", this.dates);
+    },
+  },
+  computed: {
+    formattedDates() {
+      if (!this.dates) return "";
+      let formattedDates = [];
+      for (let date of this.dates) {
+        const [year, month, day] = date.split("-");
+        formattedDates.push(`${day}/${month}/${year}`);
+      }
+      return formattedDates.join(" ~ ");
     },
   },
 };

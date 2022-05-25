@@ -1,5 +1,11 @@
 <template>
-  <v-app-bar app color="primary" dark class="d-flex justify-center">
+  <v-app-bar
+    app
+    color="#415A77"
+    dark
+    class="d-flex justify-center"
+    elevation="0"
+  >
     <v-btn text @click="toHomePage"> emotional analyzer </v-btn>
   </v-app-bar>
 </template>

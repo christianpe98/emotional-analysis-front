@@ -7,6 +7,7 @@ const store = new Vuex.Store({
   state: {
     username: "",
     analysis: [],
+    dates: [],
   },
   mutations: {
     setUsername(state, username) {
@@ -15,10 +16,14 @@ const store = new Vuex.Store({
     setAnalysis(state, analysis) {
       state.analysis = analysis;
     },
+    setDates(state, dates) {
+      state.dates = dates;
+    },
   },
   getters: {
     getUsername: (state) => state.username,
     getAnalysis: (state) => state.analysis,
+    getDates: (state) => state.dates,
   },
 });
 
