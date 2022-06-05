@@ -12,3 +12,6 @@ export default {
   components: { Header },
 };
 </script>
+<style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Merienda&display=swap");
+</style>

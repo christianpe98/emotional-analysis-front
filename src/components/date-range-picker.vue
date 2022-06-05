@@ -14,6 +14,7 @@
         readonly
         v-bind="attrs"
         v-on="on"
+        color="#9ea2d9"
       ></v-text-field>
     </template>
     <v-date-picker
@@ -23,10 +24,11 @@
       :show-current="false"
       min="2010-11-06"
       :max="new Date().toISOString().split('T')[0]"
+      color="#9ea2d9"
     >
       <v-spacer></v-spacer>
-      <v-btn text color="primary" @click="modal = false"> Cancel </v-btn>
-      <v-btn text color="primary" @click="saveDates"> OK </v-btn>
+      <v-btn text @click="modal = false" color="#9ea2d9"> Cancel </v-btn>
+      <v-btn text @click="saveDates" color="#9ea2d9"> OK </v-btn>
     </v-date-picker>
   </v-dialog>
 </template>
@@ -35,6 +37,14 @@
 export default {
   name: "DateRangePicker",
   prop: ["value"],
+  async created() {
+    const now = new Date();
+    now.setDate(now.getDate() - 7);
+    const startDate = new Date(now.getTime()).toISOString().split("T")[0];
+    const endDate = new Date().toISOString().split("T")[0];
+    this.dates = [startDate, endDate];
+    this.$emit("input", this.dates);
+  },
   data() {
     return {
       dates: [],
@@ -57,13 +67,14 @@ export default {
   },
   computed: {
     formattedDates() {
-      if (!this.dates) return "";
+      if (!this.dates || this.dates.length <= 0) return "";
       let formattedDates = [];
       for (let date of this.dates) {
+        console.log(this.dates);
         const [year, month, day] = date.split("-");
         formattedDates.push(`${day}/${month}/${year}`);
       }
-      return formattedDates.join(" ~ ");
+      return `Inicio: ${formattedDates[0]} - Fin: ${formattedDates[1]}`;
     },
   },
 };

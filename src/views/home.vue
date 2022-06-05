@@ -1,8 +1,12 @@
 <template>
-  <v-main class="df-flex justify-center align-center">
-    <v-container>
+  <main class="emo-main">
+    <div class="emo-title-wrapper">
+      <h1>Análisis emocional</h1>
+    </div>
+    <div class="emo-wrapper">
       <v-alert
         dense
+        color="#e066a2"
         text
         type="error"
         v-if="isError"
@@ -13,6 +17,7 @@
 
       <Loading v-if="isLoading" />
       <v-form
+        class="emo-form"
         v-else
         ref="form"
         v-model="isValid"
@@ -20,19 +25,24 @@
       >
         <UsernameInput v-model="username" @blur="cleanValidation" required />
         <DateRangePicker v-model="dates" />
-        <v-combobox
-          v-model="selected"
-          :items="items"
-          label="Combobox"
-          item-text="label"
-          dense
-        ></v-combobox>
-        <v-btn color="primary" :disabled="!isFormValid" type="submit">
+        <div class="emo-combobox-wrapper">
+          <v-autocomplete
+            v-model="methodAnalysis"
+            :items="items"
+            label="Seleccione un método para realizar el análisis"
+            item-text="label"
+            item-value="code"
+            dense
+            color="#e066a2"
+            no-data-text="Ninguna coincidencia con los métodos disponibles"
+          ></v-autocomplete>
+        </div>
+        <v-btn color="#7bc8df" :disabled="!isFormValid" type="submit">
           Analizar
         </v-btn>
       </v-form>
-    </v-container>
-  </v-main>
+    </div>
+  </main>
 </template>
 
 <script>
@@ -61,14 +71,14 @@ export default {
       isValid: false,
       isLoading: false,
       items: [],
-      selected: "",
+      methodAnalysis: null,
     };
   },
   computed: {
     isFormValid() {
       if (this.username === "") return false;
-      console.log(this.dates.length);
       if (this.dates.length !== 2) return false;
+      if (!this.methodAnalysis) return false;
       return true;
     },
   },
@@ -93,8 +103,8 @@ export default {
             this.dates[0] +
             "&end_date=" +
             this.dates[1] +
-            "&spproach=" +
-            this.selected.code
+            "&analysis_code=" +
+            this.methodAnalysis
         )
         .then((result) => {
           if (result.data.error) {
@@ -126,3 +136,39 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.emo {
+  &-main {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  &-title-wrapper {
+    width: 100%;
+    max-width: 900px;
+    padding-left: 50px;
+    h1 {
+      color: #faa250;
+    }
+  }
+  &-wrapper {
+    width: 100%;
+    max-width: 900px;
+    border: 4px solid #faa250;
+    border-radius: 50px;
+    padding: 50px;
+  }
+  &-form {
+    text-align: right;
+    width: 100%;
+  }
+
+  &-combobox-wrapper {
+    padding-left: 33px;
+  }
+}
+</style>
