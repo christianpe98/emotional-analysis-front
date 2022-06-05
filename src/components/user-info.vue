@@ -2,7 +2,7 @@
   <v-card class="my-12">
     <v-container>
       <v-row>
-        <v-col>
+        <v-col style="text-align: right">
           <v-avatar size="150">
             <v-img :src="profileImageUrl"></v-img>
           </v-avatar>

@@ -7,6 +7,7 @@
     prepend-icon="mdi-twitter"
     :rules="[validationRules.notEmpty, validationRules.withoutAt]"
     @blur="$emit('blur')"
+    color="#7bc8df"
   ></v-text-field>
 </template>
 
@@ -31,11 +32,6 @@ export default {
   watch: {
     username(newValue) {
       this.$emit("input", newValue);
-    },
-  },
-  methods: {
-    test() {
-      console.log(1);
     },
   },
   emits: ["blur", "input"],

@@ -1,5 +1,5 @@
 <template>
-  <v-main>
+  <v-main class="px-10">
     <UserInfo
       :username="username"
       :name="name"
