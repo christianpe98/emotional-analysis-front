@@ -104,6 +104,7 @@ export default {
             "&end_date=" +
             this.dates[1] +
             "&analysis_code=" +
+            this.methodAnalysis
         )
         .then((result) => {
           if (result.data.error) {
