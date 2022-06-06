@@ -71,14 +71,14 @@ export default {
       isValid: false,
       isLoading: false,
       items: [],
-      methodAnalysis: null,
+      methodAnalysis: "",
     };
   },
   computed: {
     isFormValid() {
       if (this.username === "") return false;
       if (this.dates.length !== 2) return false;
-      if (!this.methodAnalysis) return false;
+      if (this.methodAnalysis === "") return false;
       return true;
     },
   },
@@ -104,7 +104,6 @@ export default {
             "&end_date=" +
             this.dates[1] +
             "&analysis_code=" +
-            this.methodAnalysis
         )
         .then((result) => {
           if (result.data.error) {
