@@ -58,6 +58,7 @@ export default {
   components: { UsernameInput, DateRangePicker, Loading },
   async created() {
     let url = process.env.VUE_APP_APPROACHES;
+    console.log(process.env.NETLIFY);
     if (process.env.NETLIFY) {
       url = "api/emotional/approaches";
     }
