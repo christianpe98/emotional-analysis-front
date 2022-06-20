@@ -58,7 +58,7 @@ export default {
   components: { UsernameInput, DateRangePicker, Loading },
   async created() {
     this.items = (
-      await axios.get("http://127.0.0.1:8000/emotional/approaches")
+      await axios.get(process.env.VUE_APP_APPROACHES_URL)
     ).data.approaches_codes;
   },
   data() {
@@ -72,40 +72,74 @@ export default {
       isLoading: false,
       items: [],
       methodAnalysis: "",
+      isUsernameValid: false,
+      isDatesValid: false,
+      isMethodAnalysisValid: false,
     };
   },
   computed: {
     isFormValid() {
-      if (this.username === "") return false;
-      if (this.dates.length !== 2) return false;
-      if (this.methodAnalysis === "") return false;
-      return true;
+      return (
+        this.isUsernameValid && this.isDatesValid && this.isMethodAnalysisValid
+      );
+    },
+  },
+  watch: {
+    username(newUsername) {
+      if (newUsername === "") {
+        this.isUsernameValid = false;
+        return;
+      }
+      if (newUsername.includes("@")) {
+        this.isUsernameValid = false;
+        return;
+      }
+      this.isUsernameValid = true;
+    },
+    dates(newDates) {
+      const startDate = new Date(newDates[0]);
+      const endDate = new Date(newDates[1]);
+      if (startDate > endDate) {
+        this.isError = true;
+        this.errorText = "La fecha de fin no puede ser anterior a la de inicio";
+        this.isDatesValid = false;
+        return;
+      }
+      if (newDates.length !== 2) {
+        this.isError = true;
+        this.errorText =
+          "Debe indicarse una fecha de inicio y una fecha de fin";
+        this.isDatesValid = false;
+        return;
+      }
+      this.isDatesValid = true;
+    },
+    methodAnalysis(newMethod) {
+      console.log(newMethod);
+      if (newMethod === "") {
+        this.isError = true;
+        this.errorText = "Debe indicarse un método para realizar el análisis";
+        this.isMethodAnalysisValid = false;
+        return;
+      }
+      this.isMethodAnalysisValid = true;
     },
   },
   methods: {
     submitUsername() {
-      const startDate = new Date(this.dates[0]);
-      const endDate = new Date(this.dates[1]);
-      if (startDate > endDate) {
-        this.isError = true;
-        this.errorText = "La fecha inicial es posterior a la de fin";
-        return;
-      }
       this.$store.commit("setUsername", this.username);
       this.$store.commit("setDates", this.dates);
       this.isError = false;
       this.isLoading = true;
       axios
-        .get(
-          "http://127.0.0.1:8000/emotional?username=" +
-            this.username +
-            "&start_date=" +
-            this.dates[0] +
-            "&end_date=" +
-            this.dates[1] +
-            "&analysis_code=" +
-            this.methodAnalysis
-        )
+        .get(process.env.VUE_APP_EMOTIONAL_URL, {
+          params: {
+            username: this.username,
+            start_date: this.dates[0],
+            end_date: this.dates[1],
+            analysis_code: this.methodAnalysis,
+          },
+        })
         .then((result) => {
           if (result.data.error) {
             this.isLoading = false;
