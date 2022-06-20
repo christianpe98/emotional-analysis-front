@@ -58,8 +58,9 @@ export default {
   components: { UsernameInput, DateRangePicker, Loading },
   async created() {
     let url = process.env.VUE_APP_APPROACHES;
-    console.log(process.env.NETLIFY);
-    if (process.env.NETLIFY) {
+    console.log(process.env);
+    console.log(process.env.IS_ON_NETLIFY);
+    if (process.env.IS_ON_NETLIFY) {
       url = "api/emotional/approaches";
     }
     this.items = (await axios.get(url)).data.approaches_codes;
