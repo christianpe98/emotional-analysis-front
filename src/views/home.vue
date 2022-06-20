@@ -57,9 +57,11 @@ export default {
   name: "Home",
   components: { UsernameInput, DateRangePicker, Loading },
   async created() {
-    this.items = (
-      await axios.get(process.env.VUE_APP_APPROACHES_URL)
-    ).data.approaches_codes;
+    let url = process.env.VUE_APP_APPROACHES;
+    if (process.env.NETLIFY) {
+      url = "api/emotional/approaches";
+    }
+    this.items = (await axios.get(url)).data.approaches_codes;
   },
   data() {
     return {
