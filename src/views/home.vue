@@ -57,13 +57,9 @@ export default {
   name: "Home",
   components: { UsernameInput, DateRangePicker, Loading },
   async created() {
-    let url = process.env.VUE_APP_APPROACHES;
-    console.log(process.env);
-    console.log(process.env.IS_ON_NETLIFY);
-    if (process.env.NODE_ENV === "production") {
-      url = "api/emotional/approaches";
-    }
-    this.items = (await axios.get(url)).data.approaches_codes;
+    this.items = (
+      await axios.get(process.env.VUE_APP_APPROACHES)
+    ).data.approaches_codes;
   },
   data() {
     return {
@@ -136,7 +132,7 @@ export default {
       this.isError = false;
       this.isLoading = true;
       axios
-        .get(process.env.VUE_APP_EMOTIONAL_URL, {
+        .get(process.env.VUE_APP_EMOTIONAL, {
           params: {
             username: this.username,
             start_date: this.dates[0],

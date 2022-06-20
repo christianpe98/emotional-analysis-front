@@ -35,7 +35,11 @@ export default {
   methods: {
     fetchUserInfo() {
       axios
-        .get("http://127.0.0.1:8000/userinfo?username=" + this.username)
+        .get(process.env.VUE_APP_USER_INFO, {
+          params: {
+            username: this.username,
+          },
+        })
         .then((result) => {
           this.name = result.data.name;
           this.profileImageUrl = result.data.profile_image_url;
