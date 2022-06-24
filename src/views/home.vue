@@ -91,6 +91,8 @@ export default {
         return;
       }
       if (newUsername.includes("@")) {
+        this.isError = true;
+        this.errorText = "El nombre de usuario no debe de contener @";
         this.isUsernameValid = false;
         return;
       }

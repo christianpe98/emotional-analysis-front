@@ -5,7 +5,7 @@ export const ERROR_MESSAGES = {
   },
   home: {
     default: "No se ha podido analizar el usuario indicado",
-    "username-no-exist": "No existe usuario con ese username",
+    "username-no-exist": "No se encuentra un usuario con ese nombre de usuario",
     "username-invalid": "Username inválido",
   },
 };

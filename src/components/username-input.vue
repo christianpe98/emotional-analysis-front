@@ -5,7 +5,6 @@
     label="Nombre de usuario"
     placeholder="Twitter"
     prepend-icon="mdi-twitter"
-    :rules="[validationRules.notEmpty, validationRules.withoutAt]"
     @blur="$emit('blur')"
     color="#7bc8df"
   ></v-text-field>
